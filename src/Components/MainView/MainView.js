@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Table from '../Table/Table';
 import { getWalletData, walletValidation } from '../../requests';
+import Loader from '../Loader/Loader';
+import Table from '../Table/Table';
 import Nav from '../Nav/Nav';
 import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,14 +13,16 @@ function MainView() {
   const [newWallet, setWallet] = useState('');
   const [wallets, updateWallets] = useState([]);
   const [walletsData, setWalletsData] = useState([]);
+  const [displayedWallets, setDisplayedWalletsData] = useState([]);
   const [isAdded, setAddedState] = useState(false);
   const [isValidated, setValidationState] = useState(true);
   const [isInBase, setIsInBase] = useState(false);
   const [filter, setFilter] = useState('');
+  const [isLoading, setLoadingState] = useState(false);
 
   const getMultipleWalletsData = () => {
     const fetchWalletDataPromises = [];
-
+    setLoadingState(true);
     wallets.forEach(wallet => {
       const walletData = getWalletData(wallet)
       fetchWalletDataPromises.push(walletData)
@@ -27,13 +30,15 @@ function MainView() {
 
     Promise.all(fetchWalletDataPromises).then(values => {
       setWalletsData(values);
+      setDisplayedWalletsData(values);
     })
+    setLoadingState(false);
   }
 
   const addNewWalet = () => {
     const walletsUpdated = [...wallets];
 
-    if(wallets.includes(newWallet)){
+    if(wallets.includes(newWallet.trim())){
       setIsInBase(true);
       return false;
     }
@@ -85,7 +90,9 @@ function MainView() {
         )
       })
 
-      setWalletsData(filteredWallet);
+      setDisplayedWalletsData(filteredWallet);
+    } else {
+      setDisplayedWalletsData(walletsData);
     }
   }
 
@@ -126,7 +133,8 @@ function MainView() {
           })}
           {isAdded ? <button className='btn--get' onClick={getMultipleWalletsData}>Get fresh data</button> : ''}
         </aside>
-        <div className='main-display'>
+        {isLoading && (<Loader />)}
+        {!isLoading && (<div className='main-display'>
           <div className='input-and-btn'>
             <input 
               className='input--filter'
@@ -140,8 +148,8 @@ function MainView() {
               <img className='filter-icon' src={filterIcon} alt='Filter icon' />
             </button>
           </div>
-          <Table walletsData={walletsData} setWalletsData={setWalletsData} filter={filter} />
-        </div>
+          <Table walletsData={displayedWallets} setWalletsData={setDisplayedWalletsData} filter={filter} />
+        </div>)}
       </div>
     </>
   )
