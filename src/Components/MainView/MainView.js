@@ -84,6 +84,7 @@ function MainView() {
           setValidationState('We cannot validate wallet, please try again later.');
         }
       });
+    setValidationState('');
     return true;
   };
 
