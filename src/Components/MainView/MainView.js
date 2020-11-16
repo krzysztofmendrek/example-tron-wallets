@@ -7,81 +7,98 @@ import Table from '../Table/Table';
 import Nav from '../Nav/Nav';
 import trashIcon from '../../Assets/trash.svg';
 import filterIcon from '../../Assets/filter.svg';
+import warningIcon from '../../Assets/warning.svg';
 import './MainView.css';
 
 function MainView() {
-  const [newWallet, setWallet] = useState('');
-  const [wallets, updateWallets] = useState([]);
+  const [newWallet, setNewWallet] = useState('');
+  const [listWallets, updateListWallets] = useState([]);
   const [walletsData, setWalletsData] = useState([]);
   const [displayedWallets, setDisplayedWalletsData] = useState([]);
   const [isAdded, setAddedState] = useState(false);
-  const [isValidated, setValidationState] = useState(true);
-  const [isInBase, setIsInBase] = useState(false);
-  const [filter, setFilter] = useState('');
+  const [isValidatedWallet, setValidationState] = useState('');
+  const [walletFilter, setWalletFilter] = useState('');
   const [isLoading, setLoadingState] = useState(false);
 
   const getMultipleWalletsData = () => {
     const fetchWalletDataPromises = [];
     setLoadingState(true);
-    wallets.forEach(wallet => {
+    listWallets.forEach(wallet => {
       const walletData = getWalletData(wallet);
       fetchWalletDataPromises.push(walletData);
     });
 
-    Promise.all(fetchWalletDataPromises).then(values => {
-      setWalletsData(values);
-      setDisplayedWalletsData(values);
-    });
+    Promise.all(fetchWalletDataPromises)
+      .then(values => {
+        setWalletsData(values);
+        setDisplayedWalletsData(values);
+      })
+      .catch(error => {
+        if (error) {
+          setValidationState('We cannot download the data, please try again later.');
+        }
+      });
     setLoadingState(false);
+    setValidationState('');
   };
 
   const onEnterPress = event => {
     if (event.key === 'Enter') {
-      addNewWalet();
+      if (event.target.id === 'walletFinder') {
+        addNewWalet();
+      }
+      if (event.target.id === 'walletFilter') {
+        filterBy();
+      }
     }
   };
 
   const addNewWalet = () => {
-    const walletsUpdated = [...wallets];
+    const walletsUpdated = [...listWallets];
 
-    if (wallets.includes(newWallet.trim())) {
-      setIsInBase(true);
+    if (listWallets.includes(newWallet.trim())) {
+      setValidationState('The wallet is already on the list!');
       return false;
     }
-    setIsInBase(false);
+    setValidationState('');
 
-    walletValidation(newWallet).then(resp => {
-      const { result } = resp;
+    walletValidation(newWallet)
+      .then(resp => {
+        const { result } = resp;
 
-      setValidationState(result);
+        if (!result) {
+          setValidationState('The wallet is invalid!');
+          return false;
+        }
+        walletsUpdated.push(newWallet);
 
-      if (!result) {
-        return false;
-      }
-      walletsUpdated.push(newWallet);
+        updateListWallets(walletsUpdated);
 
-      updateWallets(walletsUpdated);
+        setNewWallet('');
 
-      setWallet('');
-
-      setAddedState(true);
-      return true;
-    });
+        setAddedState(true);
+        return true;
+      })
+      .catch(error => {
+        if (error) {
+          setValidationState('We cannot validate wallet, please try again later.');
+        }
+      });
     return true;
   };
 
   const removeInput = index => {
-    const updatedListWallet = [...wallets].filter(wallet => wallet !== wallets[index]);
+    const updatedListWallet = [...listWallets].filter(wallet => wallet !== listWallets[index]);
 
-    updateWallets(updatedListWallet);
+    updateListWallets(updatedListWallet);
 
-    if (wallets.length === 1) {
+    if (listWallets.length === 1) {
       setAddedState(false);
     }
   };
 
   const filterBy = () => {
-    if (filter) {
+    if (walletFilter) {
       const filteredWallet = walletsData.filter(wallet => {
         const createTime = wallet.create_time
           ? format(new Date(wallet.create_time), 'H:mm dd.MM.yy')
@@ -96,12 +113,13 @@ function MainView() {
         const address = wallet.address ? wallet.address : wallet.address === 'No data';
 
         return (
-          address.toString().toLowerCase().includes(filter.toLowerCase()) ||
-          createTime.toString().toLowerCase().includes(filter.toLowerCase()) ||
-          latestOperationTime.toString().toLowerCase().includes(filter.toLowerCase()) ||
-          balance.toString().toLowerCase().includes(filter.toLowerCase())
+          address.toString().toLowerCase().includes(walletFilter.toLowerCase()) ||
+          createTime.toString().toLowerCase().includes(walletFilter.toLowerCase()) ||
+          latestOperationTime.toString().toLowerCase().includes(walletFilter.toLowerCase()) ||
+          balance.toString().toLowerCase().includes(walletFilter.toLowerCase())
         );
       });
+      setWalletFilter('');
 
       setDisplayedWalletsData(filteredWallet);
     } else {
@@ -114,27 +132,36 @@ function MainView() {
       <Nav />
       <div className='container container--mainview'>
         <aside>
-          <label htmlFor='walletFinder'>Add a wallet:</label>
+          <label>Add a wallet:</label>
           <input
-            className={`search-input ${!isValidated ? 'search-input--error' : ''}`}
+            className={`search-input ${
+              isValidatedWallet === 'The wallet is invalid!' ? 'search-input--error' : ''
+            }`}
             id='walletFinder'
             autoComplete='off'
             onKeyPress={event => onEnterPress(event)}
             onChange={event => {
-              setWallet(event.target.value);
+              setNewWallet(event.target.value);
             }}
             value={newWallet}
             aria-label='Enter the wallet you want to add'
             type='text'
             placeholder='TGmcz6YNqeXUoNryw4LcPeTWmo1DWrxRUK'
           />
-          {!isValidated && <p className='error-info'>The wallet is invalid!</p>}
-          {isInBase && <p className='error-info'>The wallet is already on the list!</p>}
+          {isValidatedWallet === 'The wallet is invalid!' && (
+            <p className='error-info'>{isValidatedWallet}</p>
+          )}
+          {isValidatedWallet === 'The wallet is already on the list!' && (
+            <p className='error-info'>{isValidatedWallet}</p>
+          )}
+          {isValidatedWallet === 'We cannot validate wallet, please try again later.' && (
+            <p className='error-info'>{isValidatedWallet}</p>
+          )}
           <button className='btn--add' onClick={() => addNewWalet()}>
             ADD
           </button>
           {isAdded ? <label className='inputs-label'>Added wallets:</label> : ''}
-          {wallets.map((wallet, index) => (
+          {listWallets.map((wallet, index) => (
             <div className='input-and-btn' key={uuidv4()}>
               <input
                 className='input--walet'
@@ -161,29 +188,35 @@ function MainView() {
           )}
         </aside>
         {isLoading && <Loader />}
-        {!isLoading && (
-          <div className='main-display'>
-            <div className='input-and-btn'>
-              <input
-                className='input--filter'
-                type='text'
-                autoComplete='off'
-                onChange={event => {
-                  setFilter(event.target.value);
-                }}
-                value={filter}
-                aria-label='Enter the word you want to search for'
-              />
-              <button className='btn--filter' onClick={() => filterBy()}>
-                <img className='filter-icon' src={filterIcon} alt='Filter icon' />
-              </button>
-            </div>
-            <Table
-              walletsData={displayedWallets}
-              setWalletsData={setDisplayedWalletsData}
-              filter={filter}
-            />
+        {isValidatedWallet === 'We cannot download the data, please try again later.' && (
+          <div className='error-wrapper'>
+            <img className='warning-icon' src={warningIcon} alt='Warning icon' />
+            <p className='catched-error'>{isValidatedWallet}</p>
           </div>
+        )}
+        {!isLoading &&
+          isValidatedWallet !== 'We cannot download the data, please try again later.' && (
+            <div className='main-display'>
+              <div className='input-and-btn'>
+                <input
+                  id='walletFilter'
+                  className='input--filter'
+                  type='text'
+                  onKeyPress={event => onEnterPress(event)}
+                  autoComplete='off'
+                  onChange={event => {
+                    setWalletFilter(event.target.value);
+                  }}
+                  value={walletFilter}
+                  aria-label='Enter the word you want to search for'
+                />
+                <button className='btn--filter' onClick={() => filterBy()}>
+                  <img className='filter-icon' src={filterIcon} alt='Filter icon' />
+                </button>
+              </div>
+              <Table walletsData={displayedWallets} setWalletsData={setDisplayedWalletsData} />
+            </div>
+            // eslint-disable-next-line prettier/prettier
         )}
       </div>
     </>

@@ -108,6 +108,22 @@ button {
   width: 30px;
 }
 
+.error-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.warning-icon {
+  width: 30px;
+}
+
+.catched-error {
+  font-weight: 700;
+}
+
 @media (min-width: 768px) {
 }
 
