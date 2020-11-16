@@ -1,0 +1,38 @@
+{
+  "extends": ["react-app", "airbnb"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error", { "singleQuote": true }],
+    "jsx-quotes": ["error", "prefer-single"],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "react/jsx-closing-bracket-location": [0, "after-props"],
+    "jsx-a11y/anchor-is-valid": ["warn"],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectPattern": { "multiline": true }
+      }
+    ],
+    "max-len": ["error", { "code": 100 }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-console": [1, { "allow": ["warn", "error"] }],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": false,
+        "variables": false
+      }
+    ],
+    "no-param-reassign": [2, { "props": false }],
+    "react/jsx-one-expression-per-line": "off",
+    "comma-dangle": ["error", "never"],
+    "jsx-a11y/label-has-for": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "arrow-parens": [0, "requireForBlockBody"],
+    "react/button-has-type": "off",
+    "implicit-arrow-linebreak": ["off", "beside"],
+    "operator-linebreak": ["off", "before"],
+    "camelcase": ["off", { "ignoreDestructuring": true }]
+  }
+}

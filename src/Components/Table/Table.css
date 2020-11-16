@@ -1,0 +1,57 @@
+table {
+  display: block;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-align: center;
+  overflow-x: auto;
+}
+
+table td,
+table th {
+  padding: 5px;
+  text-align: left;
+}
+
+th {
+  background-color: #e9e9e9;
+}
+
+thead th {
+  border: 1px solid #bbbbbb;
+}
+
+thead th:first-child {
+  width: 320px;
+}
+
+td {
+  border: 1px solid #bbbbbb;
+  font-size: 14px;
+}
+
+td:last-child {
+  border: 0;
+}
+
+.btn--sort {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  background-color: #e9e9e9;
+}
+
+.sort-icon {
+  width: 25px;
+  vertical-align: middle;
+}
+
+.btn--trash {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  vertical-align: middle;
+}
+
+.trash-icon {
+  width: 25px;
+}

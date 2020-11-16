@@ -1,0 +1,28 @@
+nav {
+  height: 50px;
+  background-color: black;
+  color: white;
+}
+
+nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 5px;
+  margin: 0 auto;
+}
+
+.logo {
+  width: 35px;
+}
+
+.menu-icon {
+  width: 25px;
+}
+
+@media (min-width: 1024px) {
+  nav .container {
+    padding: 0 5px;
+  }
+}

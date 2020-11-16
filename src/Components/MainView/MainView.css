@@ -1,0 +1,157 @@
+.container--mainview {
+  display: flex;
+  flex-direction: column;
+  padding: 0 5px;
+}
+
+.container {
+  margin: 30px 0;
+}
+
+aside {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 250px;
+  margin-bottom: 50px;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.search-input {
+  width: 230px;
+  height: 40px;
+  padding: 0 10px;
+  margin: 10px 0 5px 0;
+  border: 1px solid lightgray;
+  border-radius: 30px;
+}
+
+.search-input--error {
+  border: 1px solid red;
+  font-weight: 700;
+  color: red;
+}
+
+button {
+  width: 70px;
+  height: 25px;
+  border: 1px solid black;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.error-info {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: red;
+}
+
+.inputs-label {
+  margin-bottom: 5px;
+}
+
+.input-and-btn {
+  display: flex;
+  width: 100%;
+}
+
+.input--walet {
+  width: 235px;
+  padding: 0 10px;
+  margin-bottom: 5px;
+  border: 1px solid lightgray;
+  border-radius: 30px;
+}
+
+.btn--remove-input {
+  width: 30px;
+  height: 30px;
+  border: 0;
+}
+
+.btn--remove-input .trash-icon {
+  width: 20px;
+}
+
+.btn--add {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.btn--get {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.input--filter {
+  width: 235px;
+  height: 30px;
+  padding: 0 10px;
+  margin: 0 5px 5px 0;
+  border: 1px solid lightgray;
+  border-radius: 30px;
+}
+
+.btn--filter {
+  width: 50px;
+  height: 35px;
+  border: 0;
+}
+
+.filter-icon {
+  width: 30px;
+}
+
+.error-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.warning-icon {
+  width: 30px;
+}
+
+.catched-error {
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 1024px) {
+  .container {
+    width: 960px;
+    margin: 30px auto;
+  }
+
+  .container--mainview {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  aside {
+    width: initial;
+    margin: 0 25px 0 0;
+  }
+
+  .search-input {
+    width: 280px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1140px;
+  }
+}
