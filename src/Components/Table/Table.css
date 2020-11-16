@@ -26,6 +26,7 @@ thead th:first-child {
 
 td {
   border: 1px solid #bbbbbb;
+  font-size: 14px;
 }
 
 td:last-child {

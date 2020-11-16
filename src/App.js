@@ -3,9 +3,7 @@ import MainView from './Components/MainView/MainView';
 import './App.css';
 
 function App() {
-  return (
-      <MainView />
-  )
+  return <MainView />;
 }
 
 export default App;
