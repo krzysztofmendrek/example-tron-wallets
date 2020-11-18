@@ -26,6 +26,14 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 - You can also filter data from the table by typing a keyword in input above the table and clicking on the filter icon
 - To go back to the original table, click the filter icon again
 
+## Base58 format wallets list to use:
+
+- TGmcz6UMqeTUoNryw4LcPeTWmo1DWrxRUK
+- TSFKJsiJrt6bUTmxS1F1Fmv6UUYdGVB9Ws
+- TN1nWMYqhnqrBXPMH1ECYouVaafRkYxhNb
+- TCFQhzJgXJnn56sqJV38H8c5YAwELZugvz
+- TUv34RrPNY2qTNHZ9q4mLc9AuUu9Tpy3Jg
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
